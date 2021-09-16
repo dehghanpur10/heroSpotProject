@@ -1,0 +1,85 @@
+service: moh-deh-spot-hero
+
+provider:
+  name: aws
+  runtime: go1.x
+  lambdaHashingVersion: 20201221
+
+  stage: api
+  region: us-west-2
+
+  # you can define service wide environment variables here
+  environment:
+    ACCESS_TOKEN: ${env:AWS_ACCESS_KEY_ID }
+    SECRET_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+
+package:
+  patterns:
+    - '!./**'
+    - ./bin/**
+
+functions:
+  app:
+    handler: bin/main
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
+resources:
+  Resources:
+    VehicleTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Vehicle
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    ReservationTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Reservation
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    FacilityTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Facility
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: latitude
+            AttributeType: N
+          - AttributeName: longitude
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        GlobalSecondaryIndexes:
+          - IndexName: "Facility_index"
+            KeySchema:
+              - AttributeName: latitude
+                KeyType: HASH
+              - AttributeName: longitude
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5

@@ -1,0 +1,296 @@
+basePath: /
+definitions:
+  lib.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  models.Facility:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      id:
+        type: string
+      latitude:
+        type: integer
+      longitude:
+        type: integer
+    type: object
+  models.InputReservation:
+    properties:
+      facility_id:
+        example: "1"
+        type: string
+      parked_vehicle_id:
+        example: "1"
+        type: string
+      quote:
+        $ref: '#/definitions/models.Quote'
+      reservation_id:
+        example: "1"
+        type: string
+      update_possible:
+        example: true
+        type: boolean
+    required:
+    - facility_id
+    - parked_vehicle_id
+    - reservation_id
+    - update_possible
+    type: object
+  models.Quote:
+    properties:
+      ends:
+        example: "2019-08-19T13:49:37.000Z"
+        type: string
+      starts:
+        example: "2019-08-19T13:49:37.000Z"
+        type: string
+    required:
+    - ends
+    - starts
+    type: object
+  models.Reservation:
+    properties:
+      facility:
+        $ref: '#/definitions/models.Facility'
+      parked_vehicle:
+        $ref: '#/definitions/models.Vehicle'
+      quote:
+        $ref: '#/definitions/models.Quote'
+      reservation_id:
+        type: string
+      update_possible:
+        type: boolean
+    type: object
+  models.Vehicle:
+    properties:
+      vehicle_description:
+        $ref: '#/definitions/models.VehicleDescription'
+      vehicle_id:
+        example: "1"
+        type: string
+    required:
+    - vehicle_description
+    - vehicle_id
+    type: object
+  models.VehicleDescription:
+    properties:
+      model:
+        example: s300
+        type: string
+      name:
+        example: benz
+        type: string
+      year:
+        example: "2021"
+        type: string
+    required:
+    - model
+    - name
+    - year
+    type: object
+host: tvwvnaqfy9.execute-api.us-west-2.amazonaws.com/api
+info:
+  contact:
+    email: m.dehghanpour10@gmail.com
+    name: Mohammad Dehghanpour
+  description: Implement spot hero
+  title: Spot Hero
+  version: "2.0"
+paths:
+  /v2/reservation:
+    post:
+      consumes:
+      - application/json
+      description: this endpoint creates a new reservation for vehicle
+      parameters:
+      - description: vehicle info
+        in: body
+        name: reservation
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputReservation'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Reservation'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+      summary: create a new reservation for vehicle
+      tags:
+      - reservation
+  /v2/reservations:
+    get:
+      consumes:
+      - application/json
+      description: this endpoint Get the summary of all reservations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Reservation'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+      summary: Get the summary of all reservations
+      tags:
+      - reservation
+  /v2/reservations/{reservation_id}/update:
+    get:
+      consumes:
+      - application/json
+      description: this endpoint will check  possibility for update time
+      parameters:
+      - description: reservation ID
+        in: path
+        name: reservation_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Reservation'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+      summary: checking  possibility  for update time
+      tags:
+      - reservation
+    put:
+      consumes:
+      - application/json
+      description: this endpoint will update reservation time
+      parameters:
+      - description: reservation ID
+        in: path
+        name: reservation_id
+        required: true
+        type: string
+      - description: reservation info
+        in: body
+        name: reservation
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputReservation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Reservation'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+      summary: update reservation time
+      tags:
+      - reservation
+  /v2/search:
+    get:
+      consumes:
+      - application/json
+      description: this endpoint will search facility on based their lan and lon
+      parameters:
+      - description: Latitude
+        in: query
+        name: lat
+        required: true
+        type: string
+      - description: longitude
+        in: query
+        name: lon
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Facility'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+      summary: search facility on based their lat and lon
+      tags:
+      - search
+  /v2/vehicles:
+    post:
+      consumes:
+      - application/json
+      description: this endpoint creates a new vehicle for user
+      parameters:
+      - description: vehicle info
+        in: body
+        name: vehicle
+        required: true
+        schema:
+          $ref: '#/definitions/models.Vehicle'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Vehicle'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.ErrorResponse'
+      summary: create a new vehicle for user
+      tags:
+      - vehicle
+swagger: "2.0"
