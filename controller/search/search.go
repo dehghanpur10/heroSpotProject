@@ -7,6 +7,7 @@ import (
 	"spotHeroProject/lib"
 	"spotHeroProject/models"
 	"spotHeroProject/service/searchService"
+	"strconv"
 )
 
 // SearchFacilityController
@@ -37,9 +38,21 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 	service := searchService.New(db)
 
 	if lon == "" && lat == "" {
-		facilities, err = service.GetFacilityWithLatAndLon(lat, lon)
-	} else {
 		facilities, err = service.GetAllFacility()
+	} else {
+		latNumber, err := strconv.ParseFloat(lat, 32)
+		if err != nil {
+			fmt.Printf("SearchFacilityController - ParseFloat %v", err)
+			lib.HttpError400(w, "lat query should be number type")
+			return
+		}
+		lonNumber, err := strconv.ParseFloat(lon, 32)
+		if err != nil {
+			fmt.Printf("SearchFacilityController - ParseFloat %v", err)
+			lib.HttpError400(w, "lon query should be number type")
+			return
+		}
+		facilities, err = service.GetFacilityWithLatAndLon(latNumber, lonNumber)
 	}
 
 	if err != nil {
@@ -57,5 +70,3 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 
 	lib.HttpSuccessResponse(w, http.StatusOK, result)
 }
-
-

@@ -10,7 +10,7 @@ import (
 	"spotHeroProject/models"
 )
 
-func (s *SearchService) GetFacilityWithLatAndLon(lat string, lon string) ([]models.Facility, error) {
+func (s *SearchService) GetFacilityWithLatAndLon(lat float64, lon float64) ([]models.Facility, error) {
 	filter := expression.Name("latitude").Equal(expression.Value(lat)).And(expression.Name("longitude").Equal(expression.Value(lon)))
 	expr, err := expression.NewBuilder().WithFilter(filter).Build()
 	if err != nil {
