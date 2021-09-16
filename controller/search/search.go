@@ -1,9 +1,12 @@
 package search
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"spotHeroProject/lib"
+	"spotHeroProject/models"
+	"spotHeroProject/service/searchService"
 )
 
 // SearchFacilityController
@@ -23,11 +26,6 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 
 	lat := r.FormValue("lat")
 	lon := r.FormValue("lon")
-	if lon == "" || lat == "" {
-		fmt.Println("SearchFacilityController -  bad request")
-		lib.HttpError400(w, "lan and lon should be send in query params")
-		return
-	}
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
@@ -35,8 +33,29 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 		lib.HttpError500(w)
 		return
 	}
-	_ = db
+	var facilities []models.Facility
+	service := searchService.New(db)
 
-	// Todo add search service
+	if lon == "" && lat == "" {
+		facilities, err = service.GetFacilityWithLatAndLon(lat, lon)
+	} else {
+		facilities, err = service.GetAllFacility()
+	}
 
+	if err != nil {
+		fmt.Printf("SearchFacilityController - %v", err)
+		lib.HttpError500(w)
+		return
+	}
+
+	result, err := json.Marshal(facilities)
+	if err != nil {
+		fmt.Printf("SearchFacilityController - Marshal - %v", err)
+		lib.HttpError500(w)
+		return
+	}
+
+	lib.HttpSuccessResponse(w, http.StatusOK, result)
 }
+
+

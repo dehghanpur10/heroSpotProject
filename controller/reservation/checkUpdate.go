@@ -47,10 +47,9 @@ func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 			lib.HttpError500(w)
 			return
 		}
-
-		lib.HttpSuccessResponse(w, http.StatusCreated, result)
+		lib.HttpSuccessResponse(w, http.StatusOK, result)
 	} else {
-		fmt.Printf("reservation can not be update")
+		fmt.Printf("CheckUpdateReservationController - reservation can not be update")
 		lib.HttpError422(w, "this reservation can not be update")
 	}
 }

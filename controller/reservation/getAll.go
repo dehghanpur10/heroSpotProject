@@ -39,5 +39,5 @@ func GetAllReservationController(w http.ResponseWriter, r *http.Request) {
 		lib.HttpError500(w)
 		return
 	}
-	lib.HttpSuccessResponse(w, http.StatusCreated, result)
+	lib.HttpSuccessResponse(w, http.StatusOK, result)
 }

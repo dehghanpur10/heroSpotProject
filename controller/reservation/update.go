@@ -43,7 +43,7 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !reservation.UpdatePossible {
-		fmt.Printf("reservation can not be update")
+		fmt.Printf("UpdateReservationController - reservation can not be update")
 		lib.HttpError422(w, "this reservation can not be update")
 		return
 	}
