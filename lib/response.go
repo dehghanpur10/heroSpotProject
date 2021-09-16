@@ -60,6 +60,9 @@ func HttpError403(w http.ResponseWriter, description string) {
 func HttpError404(w http.ResponseWriter, description string) {
 	HttpErrorResponse(w, http.StatusNotFound, "Not found", description)
 }
+func HttpError422(w http.ResponseWriter, description string) {
+	HttpErrorResponse(w, http.StatusUnprocessableEntity, "unprocessable input", description)
+}
 
 func HttpError500(w http.ResponseWriter) {
 	HttpErrorResponse(w, http.StatusInternalServerError, "Internal error", "Internal server error.")
