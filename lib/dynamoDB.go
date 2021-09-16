@@ -20,8 +20,7 @@ func GetDynamoDB() (*dynamodb.DynamoDB, error) {
 	},
 	)
 	if err != nil {
-		fmt.Println("GetDynamoDB - new session: ", err)
-		return &dynamodb.DynamoDB{}, err
+		return &dynamodb.DynamoDB{}, fmt.Errorf("GetdynamoDb - newSession - %v", err)
 	}
 	return dynamodb.New(awsSession), nil
 }

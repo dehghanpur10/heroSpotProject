@@ -17,7 +17,7 @@ type CreateService struct {
 func (s *CreateService) Create(vehicle models.Vehicle) error {
 	item, err := dynamodbattribute.MarshalMap(vehicle)
 	if err != nil {
-		return fmt.Errorf("vehicleService.Create - marshaoMap - %v - %v", lib.ErrInternal, err)
+		return fmt.Errorf("vehicleService.Create - MarshalMap - %v - %v", lib.ErrInternal, err)
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
@@ -25,7 +25,7 @@ func (s *CreateService) Create(vehicle models.Vehicle) error {
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {
-		return fmt.Errorf("vehicleService.Create - putItem - %v - %v", lib.ErrInternal, err)
+		return fmt.Errorf("vehicleService.Create - PutItem - %v - %v", lib.ErrInternal, err)
 	}
 	return nil
 }

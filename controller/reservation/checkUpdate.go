@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"spotHeroProject/lib"
 )
-// CheckUpdate
+// CheckUpdateReservationController
 // @Summary checking  possibility  for update time
 // @Description this endpoint will check  possibility for update time
 // @Tags reservation
@@ -17,12 +17,12 @@ import (
 // @Failure 422 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse
 // @Router /v2/reservations/{reservation_id}/update [Get]
-func CheckUpdate(w http.ResponseWriter, r *http.Request) {
+func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	lib.InitLog(r)
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Println("check update  controller - connect to dynamoDb: ", err)
+		fmt.Printf("CheckUpdateReservationController - %v", err)
 		lib.HttpError500(w)
 		return
 	}

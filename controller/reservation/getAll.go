@@ -1,11 +1,13 @@
 package reservation
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"spotHeroProject/lib"
+	"spotHeroProject/service/reservationService"
 )
-// GetAll
+// GetAllReservationController
 // @Summary Get the summary of all reservations
 // @Description this endpoint Get the summary of all reservations
 // @Tags reservation
@@ -14,15 +16,28 @@ import (
 // @Success 200 {array} models.Reservation
 // @Failure 500 {object} lib.ErrorResponse
 // @Router /v2/reservations [Get]
-func GetAll(w http.ResponseWriter, r *http.Request) {
+func GetAllReservationController(w http.ResponseWriter, r *http.Request) {
 	lib.InitLog(r)
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Println("get all reservation controller - connect to dynamoDb: ", err)
+		fmt.Println("GetAllReservationController -  ", err)
 		lib.HttpError500(w)
 		return
 	}
-	_ = db
-	// Todo add get all reservation service
+	service := reservationService.New(db)
+
+	reservations, err := service.GetAll()
+	if err != nil {
+		fmt.Println("GetAllReservationController -  ", err)
+		lib.HttpError500(w)
+	}
+
+	result, err := json.Marshal(reservations)
+	if err != nil {
+		fmt.Printf("GetAllReservationController - Marshal - %v", err)
+		lib.HttpError500(w)
+		return
+	}
+	lib.HttpSuccessResponse(w, http.StatusCreated, result)
 }

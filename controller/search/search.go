@@ -6,7 +6,7 @@ import (
 	"spotHeroProject/lib"
 )
 
-// Search
+// SearchFacilityController
 // @Summary search facility on based their lat and lon
 // @Description this endpoint will search facility on based their lan and lon
 // @Tags search
@@ -18,20 +18,20 @@ import (
 // @Failure 400 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse
 // @Router /v2/search [Get]
-func Search(w http.ResponseWriter, r *http.Request) {
+func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 	lib.InitLog(r)
 
 	lat := r.FormValue("lat")
 	lon := r.FormValue("lon")
 	if lon == "" || lat == "" {
-		fmt.Println("search facility controller - empty query")
+		fmt.Println("SearchFacilityController -  bad request")
 		lib.HttpError400(w, "lan and lon should be send in query params")
 		return
 	}
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Println("search facility controller - connect to dynamoDb: ", err)
+		fmt.Printf("SearchFacilityController - %v", err)
 		lib.HttpError500(w)
 		return
 	}

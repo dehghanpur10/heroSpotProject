@@ -10,7 +10,7 @@ import (
 	"spotHeroProject/service/reservationService"
 )
 
-// Create
+// CreateReservationController
 // @Summary create a new reservation for vehicle
 // @Description this endpoint creates a new reservation for vehicle
 // @Tags reservation
@@ -21,13 +21,13 @@ import (
 // @Failure 400 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse
 // @Router /v2/reservation [Post]
-func Create(w http.ResponseWriter, r *http.Request) {
+func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 	lib.InitLog(r)
 
 	var inputReservation models.InputReservation
 	err := json.NewDecoder(r.Body).Decode(&inputReservation)
 	if err != nil {
-		fmt.Printf("createReservationHandler - decode - %v", err)
+		fmt.Printf("CreateReservationController - decode - %v", err)
 		lib.HttpError500(w)
 		return
 	}
@@ -35,14 +35,14 @@ func Create(w http.ResponseWriter, r *http.Request) {
 	validate := validator.New()
 	err = validate.Struct(inputReservation)
 	if err != nil {
-		fmt.Printf("createReservationHandler - validate - %v", err)
+		fmt.Printf("CreateReservationController - validate - %v", err)
 		lib.HttpError400(w, "all fields should be send")
 		return
 	}
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Printf("createReservationHandler - dynamodb - %v", err)
+		fmt.Printf("CreateReservationController - %v", err)
 		lib.HttpError500(w)
 		return
 	}
@@ -51,21 +51,21 @@ func Create(w http.ResponseWriter, r *http.Request) {
 
 	reservation, err := service.FetchReservationInfo(inputReservation)
 	if err != nil {
-		fmt.Printf("createReservationHandler - %v", err)
+		fmt.Printf("CreateReservationController - %v", err)
 		lib.HttpErrorWith(w, err)
 		return
 	}
 
 	err = service.Create(reservation)
 	if err != nil {
-		fmt.Printf("createReservationHandler - %v", err)
+		fmt.Printf("CreateReservationController - %v", err)
 		lib.HttpError500(w)
 		return
 	}
 
 	result, err := json.Marshal(reservation)
 	if err != nil {
-		fmt.Printf("createReservationHandler - marshal - %v", err)
+		fmt.Printf("CreateReservationController - marshal - %v", err)
 		lib.HttpError500(w)
 		return
 	}
