@@ -20,7 +20,7 @@ import (
 // @Failure 404 {object} lib.ErrorResponse
 // @Failure 422 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse
-// @Router /v2/reservations/{"reservation_id}"/update [Get]
+// @Router /v2/reservations/{reservation_id}/update [Get]
 func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	lib.InitLog(r)
 
