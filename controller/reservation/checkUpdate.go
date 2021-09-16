@@ -50,6 +50,7 @@ func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 
 		lib.HttpSuccessResponse(w, http.StatusCreated, result)
 	} else {
+		fmt.Printf("reservation can not be update")
 		lib.HttpError422(w, "this reservation can not be update")
 	}
 }
