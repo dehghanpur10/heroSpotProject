@@ -11,6 +11,9 @@ import (
 
 func (s *ReservationService) FetchReservationInfo(reservation models.InputReservation) (models.Reservation, error) {
 	var completeReservation models.Reservation
+	completeReservation.Quote = reservation.Quote
+	completeReservation.UpdatePossible = reservation.UpdatePossible
+	completeReservation.Id = reservation.Id
 
 	vehicleId := reservation.ParkedVehicle
 	facilityId := reservation.Facility
@@ -35,7 +38,7 @@ func (s *ReservationService) getVehicle(reservation *models.Reservation, vehicle
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String("VehicleSpot"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": &dynamodb.AttributeValue{
+			"vehicle_id": &dynamodb.AttributeValue{
 				S: aws.String(vehicleId),
 			},
 		},
