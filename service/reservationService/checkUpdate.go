@@ -11,9 +11,9 @@ import (
 
 func (s *ReservationService) CheckUpdate(reservationId string) (models.Reservation, error) {
 	getItemInput := &dynamodb.GetItemInput{
-		TableName: aws.String("reservation"),
+		TableName: aws.String("ReservationSpot"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": &dynamodb.AttributeValue{
+			"reservation_id": &dynamodb.AttributeValue{
 				S: aws.String(reservationId),
 			},
 		},

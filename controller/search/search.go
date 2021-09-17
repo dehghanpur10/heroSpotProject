@@ -11,13 +11,13 @@ import (
 )
 
 // SearchFacilityController
-// @Summary search facility on based their lat and lon
-// @Description this endpoint will search facility on based their lan and lon
+// @Summary search facility
+// @Description  if user enter lon and lat query this endpoint will search facility based on lon and lat facility if user don't enter, this endpoint will send all facility
 // @Tags search
 // @Accept  json
 // @Produce  json
-// @Param lat query string true "Latitude"
-// @Param lon query string true "longitude"
+// @Param lat query string false "Latitude"
+// @Param lon query string false "longitude"
 // @Success 200 {array} models.Facility
 // @Failure 400 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse

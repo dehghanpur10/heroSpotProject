@@ -21,7 +21,7 @@ func (s *CreateService) Create(vehicle models.Vehicle) error {
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
-		TableName: aws.String("Vehicle"),
+		TableName: aws.String("VehicleSpot"),
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {

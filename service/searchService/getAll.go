@@ -11,7 +11,7 @@ import (
 
 func (s *SearchService) GetAllFacility() ([]models.Facility, error) {
 	scanInput := &dynamodb.ScanInput{
-		TableName: aws.String("Facility"),
+		TableName: aws.String("FacilitySpot"),
 	}
 
 	result, err := s.db.Scan(scanInput)

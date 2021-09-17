@@ -1,4 +1,4 @@
-service: moh-deh-spot-hero
+service: moh-deh2-spot-hero
 
 provider:
   name: aws
@@ -31,12 +31,12 @@ resources:
     VehicleTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Vehicle
+        TableName: VehicleSpot
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: vehicle_id
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: vehicle_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 5
@@ -44,12 +44,12 @@ resources:
     ReservationTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Reservation
+        TableName: ReservationSpot
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: reservation_id
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: reservation_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 5
@@ -57,16 +57,16 @@ resources:
     FacilityTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Facility
+        TableName: FacilitySpot
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: facility_id
             AttributeType: S
           - AttributeName: latitude
             AttributeType: N
           - AttributeName: longitude
             AttributeType: N
         KeySchema:
-          - AttributeName: id
+          - AttributeName: facility_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 5

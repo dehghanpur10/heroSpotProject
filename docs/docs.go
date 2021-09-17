@@ -26,7 +26,37 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v2/reservation": {
+        "/v2/reservations": {
+            "get": {
+                "description": "this endpoint Get the summary of all reservations",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reservation"
+                ],
+                "summary": "Get the summary of all reservations",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Reservation"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "this endpoint creates a new reservation for vehicle",
                 "consumes": [
@@ -61,38 +91,6 @@ var doc = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/lib.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/v2/reservations": {
-            "get": {
-                "description": "this endpoint Get the summary of all reservations",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "reservation"
-                ],
-                "summary": "Get the summary of all reservations",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Reservation"
-                            }
                         }
                     },
                     "500": {
@@ -213,7 +211,7 @@ var doc = `{
         },
         "/v2/search": {
             "get": {
-                "description": "this endpoint will search facility on based their lan and lon",
+                "description": "if user enter lon and lat query this endpoint will search facility based on lon and lat facility if user don't enter, this endpoint will send all facility",
                 "consumes": [
                     "application/json"
                 ],
@@ -223,21 +221,19 @@ var doc = `{
                 "tags": [
                     "search"
                 ],
-                "summary": "search facility on based their lat and lon",
+                "summary": "search facility",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Latitude",
                         "name": "lat",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "string",
                         "description": "longitude",
                         "name": "lon",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -336,7 +332,7 @@ var doc = `{
                 "country": {
                     "type": "string"
                 },
-                "id": {
+                "facility_id": {
                     "type": "string"
                 },
                 "latitude": {

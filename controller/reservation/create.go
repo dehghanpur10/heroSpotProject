@@ -20,7 +20,7 @@ import (
 // @Success 201 {object} models.Reservation
 // @Failure 400 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse
-// @Router /v2/reservation [Post]
+// @Router /v2/reservations [Post]
 func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 	lib.InitLog(r)
 
