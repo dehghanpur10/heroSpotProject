@@ -468,7 +468,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "2.0",
-	Host:        "tvwvnaqfy9.execute-api.us-west-2.amazonaws.com/api",
+	Host:        "rxzgqi6zfc.execute-api.us-west-2.amazonaws.com/api",
 	BasePath:    "/",
 	Schemes:     []string{},
 	Title:       "Spot Hero",

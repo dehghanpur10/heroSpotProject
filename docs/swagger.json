@@ -9,7 +9,7 @@
         },
         "version": "2.0"
     },
-    "host": "tvwvnaqfy9.execute-api.us-west-2.amazonaws.com/api",
+    "host": "rxzgqi6zfc.execute-api.us-west-2.amazonaws.com/api",
     "basePath": "/",
     "paths": {
         "/v2/reservations": {

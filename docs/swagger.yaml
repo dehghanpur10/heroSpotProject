@@ -95,7 +95,7 @@ definitions:
     - name
     - year
     type: object
-host: tvwvnaqfy9.execute-api.us-west-2.amazonaws.com/api
+host: rxzgqi6zfc.execute-api.us-west-2.amazonaws.com/api
 info:
   contact:
     email: m.dehghanpour10@gmail.com

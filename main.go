@@ -30,7 +30,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 // @description Implement spot hero
 // @contact.name Mohammad Dehghanpour
 // @contact.email m.dehghanpour10@gmail.com
-// @host tvwvnaqfy9.execute-api.us-west-2.amazonaws.com/api
+// @host rxzgqi6zfc.execute-api.us-west-2.amazonaws.com/api
 // @BasePath /
 func main() {
 	lambda.Start(Handler)
