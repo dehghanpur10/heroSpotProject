@@ -3,6 +3,7 @@ package reservation
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	"net/http"
 	"spotHeroProject/lib"
@@ -20,6 +21,7 @@ import (
 // @Param reservation body models.InputReservation true "reservation info"
 // @Success 200 {object} models.Reservation
 // @Failure 404 {object} lib.ErrorResponse
+// @Failure 400 {object} lib.ErrorResponse
 // @Failure 422 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse
 // @Router /v2/reservations/{reservation_id}/update [Put]
@@ -52,7 +54,21 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	err = json.NewDecoder(r.Body).Decode(&inputReservation)
 	if err != nil {
 		fmt.Printf("UpdateReservationController - decode - %v", err)
-		lib.HttpError500(w)
+		lib.HttpError400(w, "please enter correct body request")
+		return
+	}
+
+	if inputReservation.Id != vars["reservation_id"] {
+		fmt.Println("UpdateReservationController - No match url id and body id")
+		lib.HttpError400(w, "url reservation_id must be equal to body reservation_id")
+		return
+	}
+
+	validate := validator.New()
+	err = validate.Struct(inputReservation)
+	if err != nil {
+		fmt.Printf("UpdateReservationController - validate - %v", err)
+		lib.HttpError400(w, "all fields should be send")
 		return
 	}
 

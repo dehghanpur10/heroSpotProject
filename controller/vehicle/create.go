@@ -17,7 +17,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param vehicle body models.Vehicle true "vehicle info"
-// @Success 201 {object} models.Vehicle
+// @Success 201 {object} models.Vehicle "vehicle created successfully"
 // @Failure 400 {object} lib.ErrorResponse
 // @Failure 500 {object} lib.ErrorResponse
 // @Router /v2/vehicles [Post]
@@ -28,7 +28,7 @@ func CreateVehicleController(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&vehicle)
 	if err != nil {
 		fmt.Printf("CreateVehicleController - decode - %v", err)
-		lib.HttpError500(w)
+		lib.HttpError400(w, "please enter correct body request")
 		return
 	}
 

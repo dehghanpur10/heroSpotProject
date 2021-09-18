@@ -28,7 +28,7 @@ func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&inputReservation)
 	if err != nil {
 		fmt.Printf("CreateReservationController - decode - %v", err)
-		lib.HttpError500(w)
+		lib.HttpError400(w,"please enter correct body request")
 		return
 	}
 

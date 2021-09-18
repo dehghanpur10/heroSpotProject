@@ -188,6 +188,12 @@ var doc = `{
                             "$ref": "#/definitions/models.Reservation"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.ErrorResponse"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
                         "schema": {
@@ -348,8 +354,7 @@ var doc = `{
             "required": [
                 "facility_id",
                 "parked_vehicle_id",
-                "reservation_id",
-                "update_possible"
+                "reservation_id"
             ],
             "properties": {
                 "facility_id": {
