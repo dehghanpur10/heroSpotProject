@@ -20,13 +20,13 @@ func (s *ReservationService) FetchReservationInfo(reservation models.InputReserv
 
 	err := s.getVehicle(&completeReservation, vehicleId)
 	if err != nil {
-		err = fmt.Errorf("reservationService.FetchReservationInfo  - %v ", err)
+		err = fmt.Errorf("reservationService.FetchReservationInfo  - %w ", err)
 		return models.Reservation{}, err
 	}
 
 	err = s.getFacility(&completeReservation, facilityId)
 	if err != nil {
-		err = fmt.Errorf("reservationService.FetchReservationInfo - %v ", err)
+		err = fmt.Errorf("reservationService.FetchReservationInfo - %w ", err)
 		return models.Reservation{}, err
 	}
 
