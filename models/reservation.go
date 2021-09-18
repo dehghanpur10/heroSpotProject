@@ -13,7 +13,7 @@ type InputReservation struct {
 	ParkedVehicle  string `json:"parked_vehicle_id" validate:"required" example:"1"`
 	Quote          Quote  `json:"quote"`
 	Facility       string `json:"facility_id" validate:"required" example:"1"`
-	UpdatePossible bool   `json:"update_possible" validate:"required" example:"true"`
+	UpdatePossible bool   `json:"update_possible" example:"true"`
 }
 
 type Quote struct {

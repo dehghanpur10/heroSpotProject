@@ -46,19 +46,19 @@ func (s *ReservationService) getVehicle(reservation *models.Reservation, vehicle
 
 	result, err := s.db.GetItem(input)
 	if err != nil {
-		err = fmt.Errorf("getVehicle.GetItem - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("getVehicle.GetItem - %w - %v", lib.ErrInternal, err)
 		return err
 	}
 
 	if result.Item == nil {
-		err = fmt.Errorf("getVehicle - %v", lib.ErrNotFound)
+		err = fmt.Errorf("getVehicle - %w", lib.ErrNotFound)
 		return err
 	}
 
 	var vehicle models.Vehicle
 	err = dynamodbattribute.UnmarshalMap(result.Item, &vehicle)
 	if err != nil {
-		err = fmt.Errorf("getVehicle.unmarshalMap - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("getVehicle.unmarshalMap - %w - %v", lib.ErrInternal, err)
 		return err
 	}
 
@@ -78,19 +78,19 @@ func (s *ReservationService) getFacility(reservation *models.Reservation, facili
 
 	result, err := s.db.GetItem(input)
 	if err != nil {
-		err = fmt.Errorf("getFacility.GetItem - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("getFacility.GetItem - %w - %v", lib.ErrInternal, err)
 		return err
 	}
 
 	if result.Item == nil {
-		err = fmt.Errorf("getFacility - %v", lib.ErrNotFound)
+		err = fmt.Errorf("getFacility - %w", lib.ErrNotFound)
 		return err
 	}
 
 	var facility models.Facility
 	err = dynamodbattribute.UnmarshalMap(result.Item, &facility)
 	if err != nil {
-		err = fmt.Errorf("getFacility.unmarshalMap - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("getFacility.unmarshalMap - %w - %v", lib.ErrInternal, err)
 		return err
 	}
 

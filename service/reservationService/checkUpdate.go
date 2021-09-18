@@ -21,19 +21,19 @@ func (s *ReservationService) CheckUpdate(reservationId string) (models.Reservati
 
 	result, err := s.db.GetItem(getItemInput)
 	if err != nil {
-		err = fmt.Errorf("reservationService.cehckUpdate - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("reservationService.cehckUpdate - %w - %v", lib.ErrInternal, err)
 		return models.Reservation{}, err
 	}
 
 	if result.Item == nil {
-		err = fmt.Errorf("reservationService.cehckUpdate - %v", lib.ErrNotFound)
+		err = fmt.Errorf("reservationService.cehckUpdate - %w", lib.ErrNotFound)
 		return models.Reservation{}, err
 	}
 
 	var reservation models.Reservation
 	err = dynamodbattribute.UnmarshalMap(result.Item, &reservation)
 	if err != nil {
-		err = fmt.Errorf("reservationService.cehckUpdate - unmarshalMap - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("reservationService.cehckUpdate - unmarshalMap - %w - %v", lib.ErrInternal, err)
 		return models.Reservation{}, err
 	}
 

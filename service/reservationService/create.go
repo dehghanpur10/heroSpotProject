@@ -12,7 +12,7 @@ import (
 func (s *ReservationService) Create(reservation models.Reservation) error {
 	item, err := dynamodbattribute.MarshalMap(reservation)
 	if err != nil {
-		return fmt.Errorf("reservationService.Create - marshaoMap - %v - %v", lib.ErrInternal, err)
+		return fmt.Errorf("reservationService.Create - marshaoMap - %w - %v", lib.ErrInternal, err)
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
@@ -20,7 +20,7 @@ func (s *ReservationService) Create(reservation models.Reservation) error {
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {
-		return fmt.Errorf("reservationService.Create - putItem - %v - %v", lib.ErrInternal, err)
+		return fmt.Errorf("reservationService.Create - putItem - %w - %v", lib.ErrInternal, err)
 	}
 	return nil
 }

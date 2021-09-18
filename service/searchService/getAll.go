@@ -17,13 +17,13 @@ func (s *SearchService) GetAllFacility() ([]models.Facility, error) {
 	result, err := s.db.Scan(scanInput)
 
 	if err != nil {
-		return nil, fmt.Errorf("searchService.GetAllFacility - Scan - %v - %v", lib.ErrInternal, err)
+		return nil, fmt.Errorf("searchService.GetAllFacility - Scan - %w - %v", lib.ErrInternal, err)
 	}
 
 	var facilities []models.Facility
 	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &facilities)
 	if err != nil {
-		err = fmt.Errorf("searchService.GetAllFacility - UnmarshalListOfMaps - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("searchService.GetAllFacility - UnmarshalListOfMaps - %w - %v", lib.ErrInternal, err)
 		return nil, err
 	}
 

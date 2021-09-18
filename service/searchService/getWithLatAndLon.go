@@ -27,13 +27,13 @@ func (s *SearchService) GetFacilityWithLatAndLon(lat float64, lon float64) ([]mo
 
 	result, err := s.db.Query(queryInput)
 	if err != nil {
-		return nil, fmt.Errorf("searchService.GetFacilityWithLatAndLon - query - %v - %v", lib.ErrInternal, err)
+		return nil, fmt.Errorf("searchService.GetFacilityWithLatAndLon - query - %w - %v", lib.ErrInternal, err)
 	}
 
 	var facilities []models.Facility
 	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &facilities)
 	if err != nil {
-		err = fmt.Errorf("searchService.GetFacilityWithLatAndLon  - UnmarshalListOfMaps - %v - %v", lib.ErrInternal, err)
+		err = fmt.Errorf("searchService.GetFacilityWithLatAndLon  - UnmarshalListOfMaps - %w - %v", lib.ErrInternal, err)
 		return nil, err
 	}
 
