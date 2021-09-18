@@ -152,7 +152,7 @@ var doc = `{
                 }
             },
             "put": {
-                "description": "this endpoint will update reservation time",
+                "description": "this endpoint will update reservation (url reservation_id should be equal to body reservation_id)",
                 "consumes": [
                     "application/json"
                 ],
@@ -293,7 +293,7 @@ var doc = `{
                 ],
                 "responses": {
                     "201": {
-                        "description": "Created",
+                        "description": "vehicle created successfully",
                         "schema": {
                             "$ref": "#/definitions/models.Vehicle"
                         }

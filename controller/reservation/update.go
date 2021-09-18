@@ -13,7 +13,7 @@ import (
 
 // UpdateReservationController
 // @Summary update reservation time
-// @Description this endpoint will update reservation time
+// @Description this endpoint will update reservation (url reservation_id should be equal to body reservation_id)
 // @Tags reservation
 // @Accept  json
 // @Produce  json
