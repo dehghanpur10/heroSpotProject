@@ -2,6 +2,7 @@ package reservation
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"net/http"
@@ -28,7 +29,7 @@ func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&inputReservation)
 	if err != nil {
 		fmt.Printf("CreateReservationController - decode - %v", err)
-		lib.HttpError400(w,"please enter correct body request")
+		lib.HttpError400(w, "please enter correct body request")
 		return
 	}
 
@@ -52,7 +53,10 @@ func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 	reservation, err := service.FetchReservationInfo(inputReservation)
 	if err != nil {
 		fmt.Printf("CreateReservationController - %v", err)
-		lib.HttpErrorWith(w, err)
+		if errors.Is(err, lib.ErrNotFound) {
+			lib.HttpError404(w,"facility_id or vehicle_id not found")
+		}
+		lib.HttpError500(w)
 		return
 	}
 

@@ -2,6 +2,7 @@ package reservation
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -40,7 +41,10 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	reservation, err := service.CheckUpdate(vars["reservation_id"])
 	if err != nil {
 		fmt.Printf("UpdateReservationController - %v", err)
-		lib.HttpErrorWith(w, err)
+		if errors.Is(err, lib.ErrNotFound) {
+			lib.HttpError404(w,"reservation not found")
+		}
+		lib.HttpError500(w)
 		return
 	}
 
@@ -75,7 +79,10 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	newReservation, err := service.FetchReservationInfo(inputReservation)
 	if err != nil {
 		fmt.Printf("UpdateReservationController - %v", err)
-		lib.HttpErrorWith(w, err)
+		if errors.Is(err, lib.ErrNotFound) {
+			lib.HttpError404(w,"facility_id or vehicle_id not found")
+		}
+		lib.HttpError500(w)
 		return
 	}
 

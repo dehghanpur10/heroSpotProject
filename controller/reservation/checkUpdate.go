@@ -2,6 +2,7 @@ package reservation
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -36,7 +37,10 @@ func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	reservation, err := service.CheckUpdate(vars["reservation_id"])
 	if err != nil {
 		fmt.Printf("CheckUpdateReservationController - %v", err)
-		lib.HttpErrorWith(w, err)
+		if errors.Is(err, lib.ErrNotFound) {
+			lib.HttpError400(w,"this reservation not found~")
+		}
+		lib.HttpError500(w)
 		return
 	}
 
