@@ -2,7 +2,6 @@ package lib
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -13,7 +12,6 @@ func InitLog(r *http.Request) {
 
 func jsonResponseHeaders(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Content-Type", "application/json")
 }
 
@@ -45,18 +43,6 @@ func HttpError400(w http.ResponseWriter, description string) {
 	HttpErrorResponse(w, http.StatusBadRequest, "Bad request", description)
 }
 
-func HttpError401(w http.ResponseWriter, description string) {
-	HttpErrorResponse(w, http.StatusUnauthorized, "Unauthorized", description)
-}
-
-func HttpError402(w http.ResponseWriter, description string) {
-	HttpErrorResponse(w, http.StatusPaymentRequired, "Payment Required", description)
-}
-
-func HttpError403(w http.ResponseWriter, description string) {
-	HttpErrorResponse(w, http.StatusForbidden, "Forbidden", description)
-}
-
 func HttpError404(w http.ResponseWriter, description string) {
 	HttpErrorResponse(w, http.StatusNotFound, "Not found", description)
 }
@@ -68,23 +54,3 @@ func HttpError500(w http.ResponseWriter) {
 	HttpErrorResponse(w, http.StatusInternalServerError, "Internal error", "Internal server error.")
 }
 
-func HttpError503(w http.ResponseWriter) {
-	HttpErrorResponse(w, http.StatusServiceUnavailable, "Service Unavailable", "Service is unavailable.")
-}
-
-func HttpErrorWith(w http.ResponseWriter, err error) {
-	if err == nil {
-		fmt.Print("HttpErrorWith: Error was nil.")
-		HttpError500(w)
-		return
-	}
-	if errors.Is(err, ErrNotFound) {
-		HttpError404(w, err.Error())
-	} else if errors.Is(err, ErrForbidden) {
-		HttpError403(w, err.Error())
-	} else if errors.Is(err, ErrDatabaseConnection) {
-		HttpError500(w)
-	} else {
-		HttpError500(w)
-	}
-}

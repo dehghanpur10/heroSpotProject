@@ -26,11 +26,13 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24 // indirect
+	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2 // indirect
 	github.com/swaggo/gin-swagger v1.1.0 // indirect
 	github.com/swaggo/http-swagger v1.1.1 // indirect
 	github.com/swaggo/swag v1.7.1 // indirect
 	github.com/urfave/cli v1.20.0 // indirect
+	github.com/vektra/mockery/v2 v2.9.4 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/net v0.0.0-20210913180222-943fd674d43e // indirect
 	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0 // indirect
