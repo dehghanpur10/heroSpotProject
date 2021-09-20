@@ -31,7 +31,6 @@ func (s *ReservationService) FetchReservationInfo(reservation models.InputReserv
 	}
 
 	return completeReservation, nil
-
 }
 
 func (s *ReservationService) getVehicle(reservation *models.Reservation, vehicleId string) error {

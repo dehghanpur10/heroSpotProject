@@ -35,7 +35,7 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var facilities []models.Facility
-	service := searchService.New(db)
+	service := searchService.NewSearchService(db)
 
 	if lon == "" && lat == "" {
 		facilities, err = service.GetAllFacility()
