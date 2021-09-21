@@ -27,18 +27,18 @@ func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Printf("CheckUpdateReservationController - %v", err)
+		fmt.Printf("CheckUpdateReservationController - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}
 
 	service := reservationService.New(db)
 	vars := mux.Vars(r)
-	reservation, err := service.CheckUpdate(vars["reservation_id"])
+	reservation, err := service.CheckUpdateReservation(vars["reservation_id"])
 	if err != nil {
-		fmt.Printf("CheckUpdateReservationController - %v", err)
+		fmt.Printf("CheckUpdateReservationController - %v\n", err)
 		if errors.Is(err, lib.ErrNotFound) {
-			lib.HttpError400(w,"this reservation not found~")
+			lib.HttpError400(w, "this reservation not found~")
 		}
 		lib.HttpError500(w)
 		return
@@ -47,13 +47,13 @@ func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	if reservation.UpdatePossible {
 		result, err := json.Marshal(reservation)
 		if err != nil {
-			fmt.Printf("CheckUpdateReservationController - marshal - %v", err)
+			fmt.Printf("CheckUpdateReservationController - marshal - %v\n", err)
 			lib.HttpError500(w)
 			return
 		}
 		lib.HttpSuccessResponse(w, http.StatusOK, result)
 	} else {
-		fmt.Printf("CheckUpdateReservationController - reservation can not be update")
+		fmt.Printf("CheckUpdateReservationController - reservation can not be update\n")
 		lib.HttpError422(w, "this reservation can not be update")
 	}
 }

@@ -2,7 +2,6 @@ package lib
 
 import (
 	"encoding/json"
-	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
@@ -11,52 +10,40 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TODO (@ryan.bm): Its better to remove extra lines (like line 17 and 19)
-// TODO (@ryan.bm): format document before pushing to git (use gofmt or prettire in vscode)
+
 func removeLineBreakTrailing(data []byte) []byte {
-
 	return []byte(strings.TrimSuffix(string(data), "\n"))
-
 }
 
-// TODO (@ryan.bm): Its better to put the assertion inside the test function, delete headerTest()
-func headerTest(w http.ResponseWriter, t *testing.T) {
-	expectedAllowOrigin := "*"
-	expectedContentType := "application/json"
-	assert.Equal(t, expectedAllowOrigin, w.Header().Get("Access-Control-Allow-Origin"))
-	assert.Equal(t, expectedContentType, w.Header().Get("Content-Type"))
-}
 
 func TestJsonResponseHeaders(t *testing.T) {
+	// Arrange
+	expectedAllowOrigin := "*"
+	expectedContentType := "application/json"
 	rr := httptest.NewRecorder()
+	// Act
 	jsonResponseHeaders(rr)
-	headerTest(rr, t)
+	// Assert
+	assert.Equal(t, expectedAllowOrigin, rr.Header().Get("Access-Control-Allow-Origin"))
+	assert.Equal(t, expectedContentType, rr.Header().Get("Content-Type"))
 }
 
-/*
-	TODO (@ryan.bm): Its better to separate the different parts of the test with these comments:
-	// Arrange
-	...
-	// Act
-	...
-	//Assert
-	...
-*/
 func TestHttpSuccessResponse(t *testing.T) {
+	// Arrange
 	payload := []byte(`{
 					"name":"mohammad",
 					"age":22	
 				}`)
 	rr := httptest.NewRecorder()
-
+	// Act
 	HttpSuccessResponse(rr, 200, payload)
-	headerTest(rr, t)
-
+	//Assert
 	assert.Equal(t, 200, rr.Code)
 	assert.Equal(t, payload, rr.Body.Bytes())
 }
 
 func TestHttpErrorResponse(t *testing.T) {
+	// Arrange
 	expectedStatusCode := 400
 	expectedTitleError := "bad request"
 	expectedDescription := "user input isn't correct"
@@ -64,14 +51,15 @@ func TestHttpErrorResponse(t *testing.T) {
 	expectedResponseBody, err := json.Marshal(expectedError)
 	require.Nil(t, err)
 	rr := httptest.NewRecorder()
-
+	// Act
 	HttpErrorResponse(rr, expectedStatusCode, expectedTitleError, expectedDescription)
-
+	// Assert
 	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 
 func TestHttpError400(t *testing.T) {
+	// Arrange
 	expectedStatusCode := 400
 	expectedTitleError := "Bad request"
 	expectedDescription := "description"
@@ -79,14 +67,15 @@ func TestHttpError400(t *testing.T) {
 	expectedResponseBody, err := json.Marshal(expectedError)
 	require.Nil(t, err)
 	rr := httptest.NewRecorder()
-
+	// Act
 	HttpError400(rr, expectedDescription)
-
+	// Assert
 	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 
 func TestHttpError404(t *testing.T) {
+	// Arrange
 	expectedStatusCode := 404
 	expectedTitleError := "Not found"
 	expectedDescription := "description"
@@ -94,13 +83,14 @@ func TestHttpError404(t *testing.T) {
 	expectedResponseBody, err := json.Marshal(expectedError)
 	require.Nil(t, err)
 	rr := httptest.NewRecorder()
-
+	// Act
 	HttpError404(rr, expectedDescription)
-
+	// Assert
 	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 func TestHttpError422(t *testing.T) {
+	// Arrange
 	expectedStatusCode := 422
 	expectedTitleError := "unprocessable input"
 	expectedDescription := "description"
@@ -108,14 +98,15 @@ func TestHttpError422(t *testing.T) {
 	expectedResponseBody, err := json.Marshal(expectedError)
 	require.Nil(t, err)
 	rr := httptest.NewRecorder()
-
+	// Act
 	HttpError422(rr, expectedDescription)
-
+	// Assert
 	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 
 func TestHttpError500(t *testing.T) {
+	// Arrange
 	expectedStatusCode := 500
 	expectedTitleError := "Internal error"
 	expectedDescription := "Internal server error."
@@ -123,9 +114,9 @@ func TestHttpError500(t *testing.T) {
 	expectedResponseBody, err := json.Marshal(expectedError)
 	require.Nil(t, err)
 	rr := httptest.NewRecorder()
-
+	// Act
 	HttpError500(rr)
-
+	// Assert
 	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }

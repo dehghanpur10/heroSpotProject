@@ -7,6 +7,7 @@ import (
 	"spotHeroProject/lib"
 	"spotHeroProject/service/reservationService"
 )
+
 // GetAllReservationController
 // @Summary Get the summary of all reservations
 // @Description this endpoint Get the summary of all reservations
@@ -27,7 +28,7 @@ func GetAllReservationController(w http.ResponseWriter, r *http.Request) {
 	}
 	service := reservationService.New(db)
 
-	reservations, err := service.GetAll()
+	reservations, err := service.GetAllReservation()
 	if err != nil {
 		fmt.Println("GetAllReservationController -  ", err)
 		lib.HttpError500(w)
@@ -35,7 +36,7 @@ func GetAllReservationController(w http.ResponseWriter, r *http.Request) {
 
 	result, err := json.Marshal(reservations)
 	if err != nil {
-		fmt.Printf("GetAllReservationController - Marshal - %v", err)
+		fmt.Printf("GetAllReservationController - Marshal - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}

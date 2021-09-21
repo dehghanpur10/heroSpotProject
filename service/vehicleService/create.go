@@ -14,10 +14,11 @@ type CreateService struct {
 	db dynamodbiface.DynamoDBAPI
 }
 
-func (s *CreateService) Create(vehicle models.Vehicle) error {
+func (s *CreateService) CreateVehicle(vehicle models.Vehicle) error {
 	item, err := dynamodbattribute.MarshalMap(vehicle)
 	if err != nil {
-		return fmt.Errorf("vehicleService.Create - MarshalMap - %w - %v", lib.ErrInternal, err)
+		fmt.Print("vehicleService.CreateVehicle - MarshalMap - ")
+		return fmt.Errorf("%w - %v", lib.ErrInternal, err)
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
@@ -25,7 +26,8 @@ func (s *CreateService) Create(vehicle models.Vehicle) error {
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {
-		return fmt.Errorf("vehicleService.Create - PutItem - %w - %v", lib.ErrInternal, err)
+		fmt.Print("vehicleService.CreateVehicle - PutItem - ")
+		return fmt.Errorf("%w - %v", lib.ErrInternal, err)
 	}
 	return nil
 }

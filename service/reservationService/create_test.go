@@ -21,12 +21,13 @@ func TestCreateReservation(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			// Arrange
 			db := new(mocks.DynamoDBAPI)
 			service := New(db)
 			db.On("PutItem", mock.Anything).Return(&dynamodb.PutItemOutput{}, test.putItemError)
-
-			err := service.Create(models.Reservation{})
-
+			// Act
+			err := service.CreateReservation(models.Reservation{})
+			// Assert
 			if err != nil {
 				assert.Contains(t, err.Error(), test.putItemError.Error())
 			} else {

@@ -11,10 +11,12 @@ import (
 )
 
 func GetDynamoDB() (*dynamodb.DynamoDB, error) {
-	// TODO: you should throw an error (or panic()) when an environment variable is empty
 	region := os.Getenv("AWS_REGION")
 	accessToken := os.Getenv("ACCESS_TOKEN")
 	secretKey := os.Getenv("SECRET_KEY")
+	if region == "" || accessToken == "" || secretKey == "" {
+		return &dynamodb.DynamoDB{}, fmt.Errorf("GetdynamoDb - env - %v", ErrNotFound)
+	}
 	credential := credentials.NewStaticCredentials(accessToken, secretKey, "")
 	awsSession, err := session.NewSession(&aws.Config{
 		Region:      aws.String(region),

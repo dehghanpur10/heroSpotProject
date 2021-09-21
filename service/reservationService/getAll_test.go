@@ -14,10 +14,10 @@ import (
 func TestGetAllReservation(t *testing.T) {
 	items := []map[string]*dynamodb.AttributeValue{
 		{
-			"reservation_id":&dynamodb.AttributeValue{
+			"reservation_id": {
 				S: aws.String("2"),
 			},
-			"update_possible":&dynamodb.AttributeValue{
+			"update_possible": {
 				BOOL: aws.Bool(false),
 			},
 		},
@@ -28,23 +28,23 @@ func TestGetAllReservation(t *testing.T) {
 		scanResult          *dynamodb.ScanOutput
 		expectedReservation []models.Reservation
 	}{
-		{name:"scan error",scanError: errors.New("scan thrown an error")},
-		{name:"ok",scanResult: &dynamodb.ScanOutput{Items: items},expectedReservation: []models.Reservation{{Id: "2",UpdatePossible: false}}},
+		{name: "scan error", scanError: errors.New("scan thrown an error")},
+		{name: "ok", scanResult: &dynamodb.ScanOutput{Items: items}, expectedReservation: []models.Reservation{{Id: "2", UpdatePossible: false}}},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			// Arrange
 			db := new(mocks.DynamoDBAPI)
 			service := New(db)
 			db.On("Scan", mock.Anything).Return(test.scanResult, test.scanError)
-
-			reservation, err := service.GetAll()
-
+			// Act
+			reservation, err := service.GetAllReservation()
+			// Assert
 			if err != nil {
 				assert.Contains(t, err.Error(), test.scanError.Error())
 			} else {
 				assert.Nil(t, test.scanError)
 			}
-
 			assert.Equal(t, test.expectedReservation, reservation)
 		})
 	}

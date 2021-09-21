@@ -11,30 +11,30 @@ import (
 	"testing"
 )
 
-var item = []map[string]*dynamodb.AttributeValue{
-	{
-		"facility_id": &dynamodb.AttributeValue{
-			S: aws.String("1"),
-		},
-		"city": &dynamodb.AttributeValue{
-			S: aws.String("Tehran"),
-		},
-		"country": &dynamodb.AttributeValue{
-			S: aws.String("Iran"),
-		},
-		"latitude": &dynamodb.AttributeValue{
-			N: aws.String("25"),
-		},
-		"longitude": &dynamodb.AttributeValue{
-			N: aws.String("14"),
-		},
-	},
-}
-var facilities = []models.Facility{
-	{Id: "1", City: "Tehran", Country: "Iran", Latitude: 25, Longitude: 14},
-}
-
 func TestGetAllFacility(t *testing.T) {
+
+	item := []map[string]*dynamodb.AttributeValue{
+		{
+			"facility_id": {
+				S: aws.String("1"),
+			},
+			"city": {
+				S: aws.String("Tehran"),
+			},
+			"country": {
+				S: aws.String("Iran"),
+			},
+			"latitude": {
+				N: aws.String("25"),
+			},
+			"longitude": {
+				N: aws.String("14"),
+			},
+		},
+	}
+	facilities := []models.Facility{
+		{Id: "1", City: "Tehran", Country: "Iran", Latitude: 25, Longitude: 14},
+	}
 	tests := []struct {
 		name             string
 		scanError        error
@@ -48,11 +48,13 @@ func TestGetAllFacility(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			// Arrange
 			db := new(mocks.DynamoDBAPI)
 			service := NewSearchService(db)
 			db.On("Scan", mock.Anything).Return(test.scanOutput, test.scanError)
-
+			// Act
 			facility, err := service.GetAllFacility()
+			// Assert
 			if err != nil {
 				assert.Error(t, err, test.expectedError.Error())
 			} else {

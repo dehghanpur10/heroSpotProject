@@ -38,11 +38,11 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 
 	service := reservationService.New(db)
 	vars := mux.Vars(r)
-	reservation, err := service.CheckUpdate(vars["reservation_id"])
+	reservation, err := service.CheckUpdateReservation(vars["reservation_id"])
 	if err != nil {
 		fmt.Printf("UpdateReservationController - %v", err)
 		if errors.Is(err, lib.ErrNotFound) {
-			lib.HttpError404(w,"reservation not found")
+			lib.HttpError404(w, "reservation not found")
 		}
 		lib.HttpError500(w)
 		return
@@ -78,24 +78,24 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 
 	newReservation, err := service.FetchReservationInfo(inputReservation)
 	if err != nil {
-		fmt.Printf("UpdateReservationController - %v", err)
+		fmt.Printf("UpdateReservationController - %v\n", err)
 		if errors.Is(err, lib.ErrNotFound) {
-			lib.HttpError404(w,"facility_id or vehicle_id not found")
+			lib.HttpError404(w, "facility_id or vehicle_id not found")
 		}
 		lib.HttpError500(w)
 		return
 	}
 
-	err = service.Create(newReservation)
+	err = service.CreateReservation(newReservation)
 	if err != nil {
-		fmt.Printf("UpdateReservationController - %v", err)
+		fmt.Printf("UpdateReservationController - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}
 
 	result, err := json.Marshal(newReservation)
 	if err != nil {
-		fmt.Printf("UpdateReservationController - marshal - %v", err)
+		fmt.Printf("UpdateReservationController - marshal - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}

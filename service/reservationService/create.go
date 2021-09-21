@@ -9,10 +9,11 @@ import (
 	"spotHeroProject/models"
 )
 
-func (s *ReservationService) Create(reservation models.Reservation) error {
+func (s *ReservationService) CreateReservation(reservation models.Reservation) error {
 	item, err := dynamodbattribute.MarshalMap(reservation)
 	if err != nil {
-		return fmt.Errorf("reservationService.Create - marshaoMap - %w - %v", lib.ErrInternal, err)
+		fmt.Print("reservationService.Create - marshalMap - ")
+		return fmt.Errorf("%w - %v", lib.ErrInternal, err)
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
@@ -20,7 +21,8 @@ func (s *ReservationService) Create(reservation models.Reservation) error {
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {
-		return fmt.Errorf("reservationService.Create - putItem - %w - %v", lib.ErrInternal, err)
+		fmt.Printf("reservationService.Create - putItem - ")
+		return fmt.Errorf("%w - %v", lib.ErrInternal, err)
 	}
 	return nil
 }

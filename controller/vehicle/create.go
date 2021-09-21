@@ -27,7 +27,7 @@ func CreateVehicleController(w http.ResponseWriter, r *http.Request) {
 	var vehicle models.Vehicle
 	err := json.NewDecoder(r.Body).Decode(&vehicle)
 	if err != nil {
-		fmt.Printf("CreateVehicleController - decode - %v", err)
+		fmt.Println("CreateVehicleController - decode - ", err)
 		lib.HttpError400(w, "please enter correct body request")
 		return
 	}
@@ -35,29 +35,29 @@ func CreateVehicleController(w http.ResponseWriter, r *http.Request) {
 	validate := validator.New()
 	err = validate.Struct(vehicle)
 	if err != nil {
-		fmt.Printf("CreateVehicleController - validate - %v", err)
+		fmt.Println("CreateVehicleController - validate  - ", err)
 		lib.HttpError400(w, "all fields should be send")
 		return
 	}
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Printf("CreateVehicleController - %v", err)
+		fmt.Println("CreateVehicleController - ", err)
 		lib.HttpError500(w)
 		return
 	}
 
 	serviceVehicle := vehicleService.New(db)
-	err = serviceVehicle.Create(vehicle)
+	err = serviceVehicle.CreateVehicle(vehicle)
 	if err != nil {
-		fmt.Printf("CreateVehicleController - %v", err)
+		fmt.Println("CreateVehicleController - ", err)
 		lib.HttpError500(w)
 		return
 	}
 
 	result, err := json.Marshal(vehicle)
 	if err != nil {
-		fmt.Printf("CreateVehicleController - marshal - %v", err)
+		fmt.Println("CreateVehicleController - marshal - ", err)
 		lib.HttpError500(w)
 		return
 	}

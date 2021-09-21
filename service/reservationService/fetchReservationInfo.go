@@ -20,13 +20,15 @@ func (s *ReservationService) FetchReservationInfo(reservation models.InputReserv
 
 	err := s.getVehicle(&completeReservation, vehicleId)
 	if err != nil {
-		err = fmt.Errorf("reservationService.FetchReservationInfo  - %w ", err)
+		fmt.Print("reservationService.FetchReservationInfo  - ")
+		err = fmt.Errorf("%w ", err)
 		return models.Reservation{}, err
 	}
 
 	err = s.getFacility(&completeReservation, facilityId)
 	if err != nil {
-		err = fmt.Errorf("reservationService.FetchReservationInfo - %w ", err)
+		fmt.Print("reservationService.FetchReservationInfo - ")
+		err = fmt.Errorf("%w ", err)
 		return models.Reservation{}, err
 	}
 
@@ -37,7 +39,7 @@ func (s *ReservationService) getVehicle(reservation *models.Reservation, vehicle
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String("VehicleSpot"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"vehicle_id": &dynamodb.AttributeValue{
+			"vehicle_id": {
 				S: aws.String(vehicleId),
 			},
 		},
@@ -45,19 +47,22 @@ func (s *ReservationService) getVehicle(reservation *models.Reservation, vehicle
 
 	result, err := s.db.GetItem(input)
 	if err != nil {
-		err = fmt.Errorf("getVehicle.GetItem - %w - %v", lib.ErrInternal, err)
+		fmt.Print("getVehicle.GetItem - ")
+		err = fmt.Errorf("%w - %v", lib.ErrInternal, err)
 		return err
 	}
 
 	if result.Item == nil {
-		err = fmt.Errorf("getVehicle - %w", lib.ErrNotFound)
+		fmt.Print("getVehicle - ")
+		err = fmt.Errorf("%w", lib.ErrNotFound)
 		return err
 	}
 
 	var vehicle models.Vehicle
 	err = dynamodbattribute.UnmarshalMap(result.Item, &vehicle)
 	if err != nil {
-		err = fmt.Errorf("getVehicle.unmarshalMap - %w - %v", lib.ErrInternal, err)
+		fmt.Print("getVehicle.unmarshalMap - ")
+		err = fmt.Errorf("%w - %v", lib.ErrInternal, err)
 		return err
 	}
 
@@ -69,7 +74,7 @@ func (s *ReservationService) getFacility(reservation *models.Reservation, facili
 	input := &dynamodb.GetItemInput{
 		TableName: aws.String("FacilitySpot"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"facility_id": &dynamodb.AttributeValue{
+			"facility_id": {
 				S: aws.String(facilityId),
 			},
 		},
@@ -77,19 +82,22 @@ func (s *ReservationService) getFacility(reservation *models.Reservation, facili
 
 	result, err := s.db.GetItem(input)
 	if err != nil {
-		err = fmt.Errorf("getFacility.GetItem - %w - %v", lib.ErrInternal, err)
+		fmt.Print("getFacility.GetItem - ")
+		err = fmt.Errorf("%w - %v", lib.ErrInternal, err)
 		return err
 	}
 
 	if result.Item == nil {
-		err = fmt.Errorf("getFacility - %w", lib.ErrNotFound)
+		fmt.Print("getFacility - ")
+		err = fmt.Errorf("%w", lib.ErrNotFound)
 		return err
 	}
 
 	var facility models.Facility
 	err = dynamodbattribute.UnmarshalMap(result.Item, &facility)
 	if err != nil {
-		err = fmt.Errorf("getFacility.unmarshalMap - %w - %v", lib.ErrInternal, err)
+		fmt.Print("getFacility.unmarshalMap - ")
+		err = fmt.Errorf("%w - %v", lib.ErrInternal, err)
 		return err
 	}
 

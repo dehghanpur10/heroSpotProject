@@ -28,7 +28,7 @@ func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 	var inputReservation models.InputReservation
 	err := json.NewDecoder(r.Body).Decode(&inputReservation)
 	if err != nil {
-		fmt.Printf("CreateReservationController - decode - %v", err)
+		fmt.Printf("CreateReservationController - decode - %v\n", err)
 		lib.HttpError400(w, "please enter correct body request")
 		return
 	}
@@ -36,14 +36,14 @@ func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 	validate := validator.New()
 	err = validate.Struct(inputReservation)
 	if err != nil {
-		fmt.Printf("CreateReservationController - validate - %v", err)
+		fmt.Printf("CreateReservationController - validate - %v\n", err)
 		lib.HttpError400(w, "all fields should be send")
 		return
 	}
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Printf("CreateReservationController - %v", err)
+		fmt.Printf("CreateReservationController - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}
@@ -52,24 +52,24 @@ func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 
 	reservation, err := service.FetchReservationInfo(inputReservation)
 	if err != nil {
-		fmt.Printf("CreateReservationController - %v", err)
+		fmt.Printf("CreateReservationController - %v\n", err)
 		if errors.Is(err, lib.ErrNotFound) {
-			lib.HttpError404(w,"facility_id or vehicle_id not found")
+			lib.HttpError404(w, "facility_id or vehicle_id not found")
 		}
 		lib.HttpError500(w)
 		return
 	}
 
-	err = service.Create(reservation)
+	err = service.CreateReservation(reservation)
 	if err != nil {
-		fmt.Printf("CreateReservationController - %v", err)
+		fmt.Printf("CreateReservationController - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}
 
 	result, err := json.Marshal(reservation)
 	if err != nil {
-		fmt.Printf("CreateReservationController - marshal - %v", err)
+		fmt.Printf("CreateReservationController - marshal - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}

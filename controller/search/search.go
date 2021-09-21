@@ -30,7 +30,7 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 
 	db, err := lib.GetDynamoDB()
 	if err != nil {
-		fmt.Printf("SearchFacilityController - %v", err)
+		fmt.Printf("SearchFacilityController - %v \n", err)
 		lib.HttpError500(w)
 		return
 	}
@@ -42,13 +42,13 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 	} else {
 		latNumber, err := strconv.ParseFloat(lat, 32)
 		if err != nil {
-			fmt.Printf("SearchFacilityController - ParseFloat %v", err)
+			fmt.Printf("SearchFacilityController - ParseFloat %v\n", err)
 			lib.HttpError400(w, "lat query should be number type")
 			return
 		}
 		lonNumber, err := strconv.ParseFloat(lon, 32)
 		if err != nil {
-			fmt.Printf("SearchFacilityController - ParseFloat %v", err)
+			fmt.Printf("SearchFacilityController - ParseFloat %v\n", err)
 			lib.HttpError400(w, "lon query should be number type")
 			return
 		}
@@ -56,14 +56,14 @@ func SearchFacilityController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
-		fmt.Printf("SearchFacilityController - %v", err)
+		fmt.Printf("SearchFacilityController - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}
 
 	result, err := json.Marshal(facilities)
 	if err != nil {
-		fmt.Printf("SearchFacilityController - Marshal - %v", err)
+		fmt.Printf("SearchFacilityController - Marshal - %v\n", err)
 		lib.HttpError500(w)
 		return
 	}

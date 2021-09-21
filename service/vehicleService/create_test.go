@@ -22,11 +22,13 @@ func TestCreateVehicleService(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			// Arrange
 			db := new(mocks.DynamoDBAPI)
 			db.On("PutItem", mock.Anything).Return(&dynamodb.PutItemOutput{}, test.putItemError)
 			service := New(db)
-
-			err := service.Create(models.Vehicle{})
+			// Act
+			err := service.CreateVehicle(models.Vehicle{})
+			// Assert
 			if err != nil {
 				assert.Contains(t, err.Error(), test.expectedError.Error())
 			} else {

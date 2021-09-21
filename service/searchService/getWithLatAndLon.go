@@ -14,7 +14,8 @@ func (s *SearchService) GetFacilityWithLatAndLon(lat float64, lon float64) ([]mo
 	filter := expression.Name("latitude").Equal(expression.Value(lat)).And(expression.Name("longitude").Equal(expression.Value(lon)))
 	expr, err := expression.NewBuilder().WithFilter(filter).Build()
 	if err != nil {
-		return nil, fmt.Errorf("searchService.GetFacilityWithLatAndLon - expressionBuild - %v - %v", lib.ErrInternal, err)
+		fmt.Print("searchService.GetFacilityWithLatAndLon - expressionBuild - ")
+		return nil, fmt.Errorf("%v - %v", lib.ErrInternal, err)
 	}
 
 	queryInput := &dynamodb.QueryInput{
@@ -27,13 +28,15 @@ func (s *SearchService) GetFacilityWithLatAndLon(lat float64, lon float64) ([]mo
 
 	result, err := s.db.Query(queryInput)
 	if err != nil {
-		return nil, fmt.Errorf("searchService.GetFacilityWithLatAndLon - query - %w - %v", lib.ErrInternal, err)
+		fmt.Print("searchService.GetFacilityWithLatAndLon - query - ")
+		return nil, fmt.Errorf("%w - %v", lib.ErrInternal, err)
 	}
 
 	var facilities []models.Facility
 	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &facilities)
 	if err != nil {
-		err = fmt.Errorf("searchService.GetFacilityWithLatAndLon  - UnmarshalListOfMaps - %w - %v", lib.ErrInternal, err)
+		fmt.Print("searchService.GetFacilityWithLatAndLon  - UnmarshalListOfMaps - ")
+		err = fmt.Errorf("%w - %v", lib.ErrInternal, err)
 		return nil, err
 	}
 
