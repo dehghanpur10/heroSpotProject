@@ -1,12 +1,13 @@
 package routes
 
 import (
-	"github.com/gorilla/mux"
 	"net/http"
-	"spotHeroProject/controller/notFound"
+	"spotHeroProject/controller/httpserver"
 	"spotHeroProject/controller/reservation"
 	"spotHeroProject/controller/search"
 	"spotHeroProject/controller/vehicle"
+
+	"github.com/gorilla/mux"
 )
 
 func Init() *mux.Router {
@@ -18,7 +19,7 @@ func Init() *mux.Router {
 	r.HandleFunc("/v2/reservations", reservation.GetAllReservationController).Methods(http.MethodGet)
 	r.HandleFunc("/v2/reservations/{reservation_id}/update", reservation.CheckUpdateReservationController).Methods(http.MethodGet)
 	r.HandleFunc("/v2/reservations/{reservation_id}/update", reservation.UpdateReservationController).Methods(http.MethodPut)
-	r.NotFoundHandler = http.HandlerFunc(notFound.Controller)
+	r.NotFoundHandler = http.HandlerFunc(httpserver.NotFoundController)
 
 	return r
 }

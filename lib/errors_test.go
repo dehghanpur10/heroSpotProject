@@ -1,10 +1,12 @@
 package lib
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
+// TODO (@ryan.bm): why this isn't const?
 var (
 	code        = 400
 	title       = "bad request"
@@ -15,6 +17,12 @@ var (
 )
 
 func TestNewErrorResponse(t *testing.T) {
+	/*
+		TODO (@ryan.bm): use the variables here like this:
+		expectedCode = 400
+		expectedTitle = "title"
+		...
+	*/
 	err := NewErrorResponse(code, title, description)
 	assert.Equal(t, &expected, err)
 }
