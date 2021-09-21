@@ -6,7 +6,7 @@ type SearchService struct {
 	db dynamodbiface.DynamoDBAPI
 }
 
-func New(db dynamodbiface.DynamoDBAPI) *SearchService {
+func NewSearchService(db dynamodbiface.DynamoDBAPI) *SearchService {
 	return &SearchService{
 		db: db,
 	}
