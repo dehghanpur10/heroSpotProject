@@ -4,8 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
+func RemoveLineBreakTrailing(data []byte) []byte {
+	return []byte(strings.TrimSuffix(string(data), "\n"))
+}
 func InitLog(r *http.Request) {
 	fmt.Printf("%s-%s-%v-", r.Method, r.URL.Path, r.URL.Query())
 }
@@ -53,4 +57,3 @@ func HttpError422(w http.ResponseWriter, description string) {
 func HttpError500(w http.ResponseWriter) {
 	HttpErrorResponse(w, http.StatusInternalServerError, "Internal error", "Internal server error.")
 }
-

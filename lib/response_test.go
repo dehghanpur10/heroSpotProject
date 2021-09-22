@@ -11,9 +11,7 @@ import (
 )
 
 
-func removeLineBreakTrailing(data []byte) []byte {
-	return []byte(strings.TrimSuffix(string(data), "\n"))
-}
+
 
 
 func TestJsonResponseHeaders(t *testing.T) {
@@ -54,7 +52,7 @@ func TestHttpErrorResponse(t *testing.T) {
 	// Act
 	HttpErrorResponse(rr, expectedStatusCode, expectedTitleError, expectedDescription)
 	// Assert
-	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
+	assert.Equal(t, expectedResponseBody, RemoveLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 
@@ -70,7 +68,7 @@ func TestHttpError400(t *testing.T) {
 	// Act
 	HttpError400(rr, expectedDescription)
 	// Assert
-	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
+	assert.Equal(t, expectedResponseBody, RemoveLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 
@@ -86,7 +84,7 @@ func TestHttpError404(t *testing.T) {
 	// Act
 	HttpError404(rr, expectedDescription)
 	// Assert
-	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
+	assert.Equal(t, expectedResponseBody, RemoveLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 func TestHttpError422(t *testing.T) {
@@ -101,7 +99,7 @@ func TestHttpError422(t *testing.T) {
 	// Act
 	HttpError422(rr, expectedDescription)
 	// Assert
-	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
+	assert.Equal(t, expectedResponseBody, RemoveLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
 
@@ -117,6 +115,6 @@ func TestHttpError500(t *testing.T) {
 	// Act
 	HttpError500(rr)
 	// Assert
-	assert.Equal(t, expectedResponseBody, removeLineBreakTrailing(rr.Body.Bytes()))
+	assert.Equal(t, expectedResponseBody, RemoveLineBreakTrailing(rr.Body.Bytes()))
 	assert.Equal(t, expectedStatusCode, rr.Code)
 }
