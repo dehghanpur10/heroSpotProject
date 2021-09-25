@@ -9,7 +9,7 @@ import (
 	"spotHeroProject/models"
 )
 
-func (s *FacilityService) createFacilityService(facility models.Facility) error{
+func (s *FacilityService) CreateFacilityService(facility models.Facility) error{
 	item, err := dynamodbattribute.MarshalMap(facility)
 	if err != nil {
 		fmt.Print("facilityService.Create - marshalMap - ")

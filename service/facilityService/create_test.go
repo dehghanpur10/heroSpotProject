@@ -25,7 +25,7 @@ func TestCreateFacilityService(t *testing.T) {
 			service := New(mockDB)
 			mockDB.On("PutItem",mock.Anything).Return(&dynamodb.PutItemOutput{},test.putItemError)
 			// Act
-			err := service.createFacilityService(models.Facility{})
+			err := service.CreateFacilityService(models.Facility{})
 			// Assert
 			if err != nil {
 				assert.Contains(t, err.Error(),test.putItemError.Error())
