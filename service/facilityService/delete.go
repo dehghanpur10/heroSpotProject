@@ -9,6 +9,7 @@ import (
 
 func (s *FacilityService) DeleteFacilityService(facilityId string) error {
 	deleteItemInput := &dynamodb.DeleteItemInput{
+		TableName: aws.String("FacilitySpot"),
 		Key: map[string]*dynamodb.AttributeValue{
 			"facility_id": {
 				S: aws.String(facilityId),
