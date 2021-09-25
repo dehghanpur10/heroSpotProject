@@ -7,7 +7,7 @@ import (
 	"spotHeroProject/lib"
 )
 
-func (s *FacilityService) delete(facilityId string) error {
+func (s *FacilityService) DeleteFacilityService(facilityId string) error {
 	deleteItemInput := &dynamodb.DeleteItemInput{
 		Key: map[string]*dynamodb.AttributeValue{
 			"facility_id": {
