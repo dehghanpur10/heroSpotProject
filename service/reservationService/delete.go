@@ -9,7 +9,7 @@ import (
 
 func (s *ReservationService) DeleteReservationService(reservationId string) error {
 	deleteItemInput := &dynamodb.DeleteItemInput{
-		TableName: aws.String("ReservationSpot"),
+		TableName: aws.String(lib.RESERVATION_TABLE_NAME),
 		Key: map[string]*dynamodb.AttributeValue{
 			"reservation_id": {
 				S: aws.String(reservationId),

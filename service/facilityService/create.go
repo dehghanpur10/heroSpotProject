@@ -17,7 +17,7 @@ func (s *FacilityService) CreateFacilityService(facility models.Facility) error{
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
-		TableName: aws.String("FacilitySpot"),
+		TableName: aws.String(lib.FACILITY_TABLE_NAME),
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {

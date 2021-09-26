@@ -17,7 +17,7 @@ func (s *ReservationService) CreateReservation(reservation models.Reservation) e
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
-		TableName: aws.String("ReservationSpot"),
+		TableName: aws.String(lib.RESERVATION_TABLE_NAME),
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {

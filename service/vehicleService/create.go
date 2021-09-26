@@ -18,7 +18,7 @@ func (s *vehicleService) CreateVehicle(vehicle models.Vehicle) error {
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
-		TableName: aws.String("VehicleSpot"),
+		TableName: aws.String(lib.VEHICLE_TABLE_NAME),
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {

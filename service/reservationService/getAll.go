@@ -11,7 +11,7 @@ import (
 
 func (s *ReservationService) GetAllReservation() ([]models.Reservation, error) {
 	scanInput := &dynamodb.ScanInput{
-		TableName: aws.String("ReservationSpot"),
+		TableName: aws.String(lib.RESERVATION_TABLE_NAME),
 	}
 	result, err := s.db.Scan(scanInput)
 	if err != nil {

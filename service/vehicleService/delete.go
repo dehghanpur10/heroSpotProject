@@ -9,7 +9,7 @@ import (
 
 func (s *vehicleService) DeleteVehicle(id string) error {
 	deleteItemInput := &dynamodb.DeleteItemInput{
-		TableName: aws.String("VehicleSpot"),
+		TableName: aws.String(lib.VEHICLE_TABLE_NAME),
 		Key: map[string]*dynamodb.AttributeValue{
 			"vehicle_id": {
 				S: aws.String(id),
