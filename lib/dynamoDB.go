@@ -2,8 +2,6 @@ package lib
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -11,15 +9,13 @@ import (
 )
 
 func GetDynamoDB() (*dynamodb.DynamoDB, error) {
-	region := os.Getenv("AWS_REGION")
-	accessToken := os.Getenv("ACCESS_TOKEN")
-	secretKey := os.Getenv("SECRET_KEY")
-	if region == "" || accessToken == "" || secretKey == "" {
+
+	if AWS_REGION == "" || ACCESS_TOKEN == "" || SECRET_KEY == "" {
 		return &dynamodb.DynamoDB{}, fmt.Errorf("GetdynamoDb - env - %v", ErrNotFound)
 	}
-	credential := credentials.NewStaticCredentials(accessToken, secretKey, "")
+	credential := credentials.NewStaticCredentials(ACCESS_TOKEN, SECRET_KEY, "")
 	awsSession, err := session.NewSession(&aws.Config{
-		Region:      aws.String(region),
+		Region:      aws.String(AWS_REGION),
 		Credentials: credential,
 	},
 	)
