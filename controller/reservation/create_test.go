@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"spotHeroProject/lib"
 	"spotHeroProject/models"
 	"spotHeroProject/service/facilityService"
@@ -35,8 +34,7 @@ func TestCreateReservationControllerSuccess(t *testing.T) {
 			Starts: "5",
 		},
 	}
-	err := os.Setenv("AWS_REGION", "us-west-2")
-	require.NoError(t, err)
+
 	db, err := lib.GetDynamoDB()
 	require.NoError(t, err)
 	serviceOfVehicle := vehicleService.New(db)
@@ -71,7 +69,6 @@ func TestCreateReservationControllerSuccess(t *testing.T) {
 	err = json.Unmarshal(rr.Body.Bytes(), &reservation)
 	require.NoError(t, err)
 	assert.Equal(t, expectedReservation, reservation)
-
 	err = serviceOfFacility.DeleteFacilityService(facility.Id)
 	require.NoError(t, err)
 	err = serviceOfVehicle.DeleteVehicle(vehicle.Id)
@@ -79,10 +76,10 @@ func TestCreateReservationControllerSuccess(t *testing.T) {
 	serviceOfReservation := reservationService.New(db)
 	err = serviceOfReservation.DeleteReservationService(reservationInput.Id)
 	require.NoError(t, err)
-	err = os.Unsetenv("AWS_REGION")
-	require.NoError(t, err)
+
 }
 func TestCreateReservationControllerFailOnDecode(t *testing.T) {
+	// Arrange
 	expectedStatus := 400
 	expectedError := lib.ErrorResponse{Code: 400, Title: "Bad request", Description: "please enter correct body request"}
 	router := mux.NewRouter()
@@ -101,7 +98,9 @@ func TestCreateReservationControllerFailOnDecode(t *testing.T) {
 	assert.Equal(t, expectedError, errorResponse)
 }
 
+
 func TestCreateReservationControllerFailOnValidate(t *testing.T) {
+	// Arrange
 	expectedStatus := 400
 	expectedError := lib.ErrorResponse{Code: 400, Title: "Bad request", Description: "all fields should be send"}
 	router := mux.NewRouter()
@@ -121,6 +120,10 @@ func TestCreateReservationControllerFailOnValidate(t *testing.T) {
 }
 func TestCreateReservationControllerFailOnGetDynamodb(t *testing.T) {
 	// Arrange
+	defer func() {
+		lib.AWS_REGION = "us-west-2"
+	}()
+	lib.AWS_REGION = ""
 	reservation := models.InputReservation{
 		Id:             "1",
 		ParkedVehicle:  "1",
@@ -150,8 +153,7 @@ func TestCreateReservationControllerFailOnGetDynamodb(t *testing.T) {
 }
 
 func TestCreateReservationControllerFailOnNotFound(t *testing.T) {
-	err := os.Setenv("AWS_REGION", "us-west-2")
-	require.NoError(t, err)
+	// Arrange
 	reservation := models.InputReservation{
 		Id:             "1",
 		ParkedVehicle:  "1000520",
@@ -179,6 +181,38 @@ func TestCreateReservationControllerFailOnNotFound(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, expectedError, errorResponse)
 
-	err = os.Unsetenv("AWS_REGION")
+}
+
+func TestCreateReservationControllerFailOnCreateReservationService(t *testing.T) {
+	// Arrange
+	defer func() {
+		lib.RESERVATION_TABLE_NAME = "ReservationSpot"
+	}()
+	lib.RESERVATION_TABLE_NAME = ""
+	reservation := models.InputReservation{
+		Id:             "1",
+		ParkedVehicle:  "1",
+		Facility:       "1",
+		UpdatePossible: false,
+		Quote: models.Quote{
+			Ends:   "1",
+			Starts: "0",
+		},
+	}
+	expectedStatus := 500
+	expectedError := lib.ErrorResponse{Code: 500, Title: "Internal error", Description: "Internal server error."}
+	router := mux.NewRouter()
+	router.HandleFunc("/v2/reservation", CreateReservationController).Methods("POST")
+	marshal, err := json.Marshal(reservation)
 	require.NoError(t, err)
+	req, _ := http.NewRequest(http.MethodPost, "/v2/reservation", bytes.NewBuffer(marshal))
+	rr := httptest.NewRecorder()
+	// Act
+	router.ServeHTTP(rr, req)
+	//Assert
+	assert.Equal(t, expectedStatus, rr.Code)
+	var errorResponse lib.ErrorResponse
+	err = json.Unmarshal(rr.Body.Bytes(), &errorResponse)
+	require.NoError(t, err)
+	assert.Equal(t, expectedError, errorResponse)
 }
