@@ -38,7 +38,8 @@ func CheckUpdateReservationController(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Printf("CheckUpdateReservationController - %v\n", err)
 		if errors.Is(err, lib.ErrNotFound) {
-			lib.HttpError400(w, "this reservation not found~")
+			lib.HttpError404(w, "this reservation not found.")
+			return
 		}
 		lib.HttpError500(w)
 		return
