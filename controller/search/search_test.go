@@ -7,15 +7,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"spotHeroProject/lib"
 	"testing"
 )
 
 func TestSearchFacilityControllerSuccess(t *testing.T) {
 	// Arrange
-	err := os.Setenv("AWS_REGION", "us-west-2")
-	require.NoError(t, err)
 	expectedStatus := 200
 	router := mux.NewRouter()
 	router.HandleFunc("/v2/search", SearchFacilityController).Methods("GET")
@@ -25,12 +22,14 @@ func TestSearchFacilityControllerSuccess(t *testing.T) {
 	router.ServeHTTP(rr, req)
 	//Assert
 	assert.Equal(t, expectedStatus, rr.Code)
-	err = os.Unsetenv("AWS_REGION")
-	require.NoError(t, err)
 }
 
 func TestSearchFacilityControllerFailOnGetDynamodb(t *testing.T) {
 	// Arrange
+	defer func() {
+		lib.AWS_REGION = "us-west-2"
+	}()
+	lib.AWS_REGION = ""
 	expectedStatus := 500
 	expectedError := lib.ErrorResponse{Code: 500, Title: "Internal error", Description: "Internal server error."}
 	router := mux.NewRouter()
@@ -48,8 +47,7 @@ func TestSearchFacilityControllerFailOnGetDynamodb(t *testing.T) {
 }
 
 func TestSearchFacilityControllerFailOnQueryParsing(t *testing.T) {
-	err := os.Setenv("AWS_REGION", "us-west-2")
-	require.NoError(t, err)
+	// Arrange
 	tests := []struct {
 		name          string
 		url           string
@@ -72,13 +70,32 @@ func TestSearchFacilityControllerFailOnQueryParsing(t *testing.T) {
 			//Assert
 			assert.Equal(t, expectedStatus, rr.Code)
 			var errorResponse lib.ErrorResponse
-			err = json.Unmarshal(rr.Body.Bytes(), &errorResponse)
+			err := json.Unmarshal(rr.Body.Bytes(), &errorResponse)
 			require.NoError(t, err)
 			assert.Equal(t, expectedError, errorResponse)
 
 		})
 	}
-	err = os.Unsetenv("AWS_REGION")
-	require.NoError(t, err)
+}
 
+func TestSearchFacilityControllerFailOnGetFacilityService(t *testing.T) {
+	// Arrange
+	defer func() {
+		lib.FACILITY_TABLE_NAME= "FacilitySpot"
+	}()
+	lib.FACILITY_TABLE_NAME = ""
+	expectedStatus := 500
+	expectedError := lib.ErrorResponse{Code: 500, Title: "Internal error", Description: "Internal server error."}
+	router := mux.NewRouter()
+	router.HandleFunc("/v2/search", SearchFacilityController).Methods("GET")
+	req, _ := http.NewRequest(http.MethodGet, "/v2/search", nil)
+	rr := httptest.NewRecorder()
+	// Act
+	router.ServeHTTP(rr, req)
+	//Assert
+	assert.Equal(t, expectedStatus, rr.Code)
+	var errorResponse lib.ErrorResponse
+	err := json.Unmarshal(rr.Body.Bytes(), &errorResponse)
+	require.NoError(t, err)
+	assert.Equal(t, expectedError, errorResponse)
 }
