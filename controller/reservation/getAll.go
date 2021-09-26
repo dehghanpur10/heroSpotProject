@@ -32,6 +32,7 @@ func GetAllReservationController(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("GetAllReservationController -  ", err)
 		lib.HttpError500(w)
+		return
 	}
 
 	result, err := json.Marshal(reservations)

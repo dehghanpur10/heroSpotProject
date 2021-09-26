@@ -2,7 +2,6 @@ package reservation
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -50,12 +49,12 @@ func TestGetAllReservationControllerFailOnGetDynamodb(t *testing.T) {
 
 func TestGetAllReservationControllerFailOnGetAllReservationService(t *testing.T) {
 	// Arrange
-	fmt.Println("dddddd", lib.AWS_REGION)
 	defer func() {
 		lib.RESERVATION_TABLE_NAME = "ReservationSpot"
 	}()
 	lib.RESERVATION_TABLE_NAME = ""
 	expectedStatus := 500
+	expectedError := lib.ErrorResponse{Code: 500, Title: "Internal error", Description: "Internal server error."}
 	router := mux.NewRouter()
 	router.HandleFunc("/v2/reservation", GetAllReservationController).Methods("GET")
 	req, _ := http.NewRequest(http.MethodGet, "/v2/reservation", nil)
@@ -64,4 +63,8 @@ func TestGetAllReservationControllerFailOnGetAllReservationService(t *testing.T)
 	router.ServeHTTP(rr, req)
 	//Assert
 	assert.Equal(t, expectedStatus, rr.Code)
+	var errorResponse lib.ErrorResponse
+	err := json.Unmarshal(rr.Body.Bytes(), &errorResponse)
+	require.NoError(t, err)
+	assert.Equal(t, expectedError, errorResponse)
 }
