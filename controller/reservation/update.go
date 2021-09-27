@@ -43,6 +43,7 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("UpdateReservationController - %v", err)
 		if errors.Is(err, lib.ErrNotFound) {
 			lib.HttpError404(w, "reservation not found")
+			return
 		}
 		lib.HttpError500(w)
 		return
@@ -81,6 +82,7 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("UpdateReservationController - %v\n", err)
 		if errors.Is(err, lib.ErrNotFound) {
 			lib.HttpError404(w, "facility_id or vehicle_id not found")
+			return
 		}
 		lib.HttpError500(w)
 		return
@@ -100,6 +102,6 @@ func UpdateReservationController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lib.HttpSuccessResponse(w, http.StatusCreated, result)
+	lib.HttpSuccessResponse(w, http.StatusOK, result)
 
 }
