@@ -55,6 +55,7 @@ func CreateReservationController(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("CreateReservationController - %v\n", err)
 		if errors.Is(err, lib.ErrNotFound) {
 			lib.HttpError404(w, "facility_id or vehicle_id not found")
+			return
 		}
 		lib.HttpError500(w)
 		return

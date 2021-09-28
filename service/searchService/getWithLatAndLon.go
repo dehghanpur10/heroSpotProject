@@ -19,7 +19,7 @@ func (s *SearchService) GetFacilityWithLatAndLon(lat float64, lon float64) ([]mo
 	}
 
 	queryInput := &dynamodb.QueryInput{
-		TableName:                 aws.String("FacilitySpot"),
+		TableName:                 aws.String(lib.FACILITY_TABLE_NAME),
 		IndexName:                 aws.String("Facility_index"),
 		ExpressionAttributeValues: expr.Values(),
 		ExpressionAttributeNames:  expr.Names(),

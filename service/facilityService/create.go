@@ -1,4 +1,4 @@
-package reservationService
+package facilityService
 
 import (
 	"fmt"
@@ -9,19 +9,19 @@ import (
 	"spotHeroProject/models"
 )
 
-func (s *ReservationService) CreateReservation(reservation models.Reservation) error {
-	item, err := dynamodbattribute.MarshalMap(reservation)
+func (s *FacilityService) CreateFacilityService(facility models.Facility) error{
+	item, err := dynamodbattribute.MarshalMap(facility)
 	if err != nil {
-		fmt.Print("reservationService.Create - marshalMap - ")
+		fmt.Print("facilityService.Create - marshalMap - ")
 		return fmt.Errorf("%w - %v", lib.ErrInternal, err)
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
-		TableName: aws.String(lib.RESERVATION_TABLE_NAME),
+		TableName: aws.String(lib.FACILITY_TABLE_NAME),
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {
-		fmt.Printf("reservationService.Create - putItem - ")
+		fmt.Printf("facilityService.Create - putItem - ")
 		return fmt.Errorf("%w - %v", lib.ErrInternal, err)
 	}
 	return nil

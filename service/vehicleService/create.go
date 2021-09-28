@@ -5,16 +5,12 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
 	"spotHeroProject/lib"
 	"spotHeroProject/models"
 )
 
-type CreateService struct {
-	db dynamodbiface.DynamoDBAPI
-}
 
-func (s *CreateService) CreateVehicle(vehicle models.Vehicle) error {
+func (s *vehicleService) CreateVehicle(vehicle models.Vehicle) error {
 	item, err := dynamodbattribute.MarshalMap(vehicle)
 	if err != nil {
 		fmt.Print("vehicleService.CreateVehicle - MarshalMap - ")
@@ -22,7 +18,7 @@ func (s *CreateService) CreateVehicle(vehicle models.Vehicle) error {
 	}
 	input := &dynamodb.PutItemInput{
 		Item:      item,
-		TableName: aws.String("VehicleSpot"),
+		TableName: aws.String(lib.VEHICLE_TABLE_NAME),
 	}
 	_, err = s.db.PutItem(input)
 	if err != nil {
@@ -32,8 +28,3 @@ func (s *CreateService) CreateVehicle(vehicle models.Vehicle) error {
 	return nil
 }
 
-func New(db dynamodbiface.DynamoDBAPI) *CreateService {
-	return &CreateService{
-		db: db,
-	}
-}

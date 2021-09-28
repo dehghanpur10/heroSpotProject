@@ -37,7 +37,7 @@ func (s *ReservationService) FetchReservationInfo(reservation models.InputReserv
 
 func (s *ReservationService) getVehicle(reservation *models.Reservation, vehicleId string) error {
 	input := &dynamodb.GetItemInput{
-		TableName: aws.String("VehicleSpot"),
+		TableName: aws.String(lib.VEHICLE_TABLE_NAME),
 		Key: map[string]*dynamodb.AttributeValue{
 			"vehicle_id": {
 				S: aws.String(vehicleId),
@@ -72,7 +72,7 @@ func (s *ReservationService) getVehicle(reservation *models.Reservation, vehicle
 
 func (s *ReservationService) getFacility(reservation *models.Reservation, facilityId string) error {
 	input := &dynamodb.GetItemInput{
-		TableName: aws.String("FacilitySpot"),
+		TableName: aws.String(lib.FACILITY_TABLE_NAME),
 		Key: map[string]*dynamodb.AttributeValue{
 			"facility_id": {
 				S: aws.String(facilityId),
